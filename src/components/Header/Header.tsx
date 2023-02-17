@@ -17,7 +17,7 @@ const Header = () => {
         </Link>
         <div className="header__cart">
           <a href="/cart.html" className="button button--cart">
-            <span>30 EUR</span>
+            <span>30 PLN</span>
             <div className="button__delimiter"></div>
             <svg
               width="18"

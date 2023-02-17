@@ -5,7 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import Header from 'components/Header';
 import HomePage from 'pages/HomePage';
 import NotFoundPage from 'pages/NotFoundPage';
-import CartPage from 'pages/Cart';
+import CartPage from 'pages/CartPage';
 
 function App() {
   return (
