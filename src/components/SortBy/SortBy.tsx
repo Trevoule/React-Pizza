@@ -1,6 +1,15 @@
-import React from 'react';
+import { sortTypes } from 'constants/common';
+import React, { useState } from 'react';
 
 const SortBy = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedSortBy, setSelectedSortBy] = useState(sortTypes[0]);
+
+  const onClickSortBy = (type: string) => {
+    setSelectedSortBy(type);
+    setIsOpen(false);
+  };
+
   return (
     <div className="sort">
       <div className="sort__label">
@@ -16,15 +25,22 @@ const SortBy = () => {
           />
         </svg>
         <b>Sort by: </b>
-        <span>popularity</span>
+        <span onClick={() => setIsOpen(!isOpen)}>{selectedSortBy}</span>
       </div>
-      <div className="sort__popup">
-        <ul>
-          <li className="active">popularity</li>
-          <li>price</li>
-          <li>alphabetically</li>
-        </ul>
-      </div>
+      {isOpen && (
+        <div className="sort__popup">
+          <ul>
+            {sortTypes.map((type, i) => (
+              <li
+                key={i}
+                className={selectedSortBy === type ? 'active' : ''}
+                onClick={onClickSortBy.bind(null, type)}>
+                {type}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

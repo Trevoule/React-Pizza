@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Categories from 'components/Categories';
 import Header from 'components/Header';
-import PizzaItem from 'components/Pizza/PizzaItem';
 import SortBy from 'components/SortBy';
+import { pizzasUrl } from 'constants/common';
 
 import 'scss/app.scss';
-import pizzas from 'assets/pizzas.json';
+import PizzaList from 'components/Pizza/PizzaList';
 
 function App() {
+  const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(pizzasUrl)
+      .then((res) => res.json())
+      .then((items) => setItems(items))
+      .finally(() => setIsLoading(false));
+  }, []);
+
   return (
     <div className="wrapper">
       <Header />
@@ -19,11 +29,7 @@ function App() {
             <SortBy />
           </div>
           <h2 className="content__title">All pizzas</h2>
-          <div className="content__items">
-            {pizzas.map((pizza) => {
-              return <PizzaItem key={pizza.id} {...pizza} />;
-            })}
-          </div>
+          <PizzaList isLoading={isLoading} items={items} />
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+export const pizzasUrl = 'https://63efb7b1271439b7fe74db08.mockapi.io/items';
 export interface Pizza {
   id: number;
   imageUrl: string;
@@ -12,3 +13,5 @@ export interface Pizza {
 export const categories = ['All', 'With meat', 'Vegetarian', 'Grilled', 'Spicy', 'Calzone'];
 
 export const pizzaTypes = ['Thin', 'Traditional'];
+
+export const sortTypes = ['popularity', 'price', 'alphabetically'];
