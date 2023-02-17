@@ -15,17 +15,20 @@ const HomePage = () => {
       .then((res) => res.json())
       .then((items) => setItems(items))
       .finally(() => setIsLoading(false));
+
+    // scroll to top
+    window.scrollTo(0, 0);
   }, []);
 
   return (
-    <>
+    <div className="container">
       <div className="content__top">
         <Categories />
         <SortBy />
       </div>
       <h2 className="content__title">All pizzas</h2>
       <PizzaList isLoading={isLoading} items={items} />
-    </>
+    </div>
   );
 };
 
