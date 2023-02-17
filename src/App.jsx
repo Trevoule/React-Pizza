@@ -1,11 +1,12 @@
 import React from 'react';
 
-import Categories from './components/Categories';
-import Header from './components/Header';
-import PizzaItem from './components/Pizza/PizzaItem';
-import SortBy from './components/SortBy';
+import Categories from 'components/Categories';
+import Header from 'components/Header';
+import PizzaItem from 'components/Pizza/PizzaItem';
+import SortBy from 'components/SortBy';
 
-import './scss/app.scss';
+import 'scss/app.scss';
+import pizzas from 'assets/pizzas.json';
 
 function App() {
   return (
@@ -19,7 +20,9 @@ function App() {
           </div>
           <h2 className="content__title">All pizzas</h2>
           <div className="content__items">
-            <PizzaItem />
+            {pizzas.map((pizza) => {
+              return <PizzaItem key={pizza.id} {...pizza} />;
+            })}
           </div>
         </div>
       </div>

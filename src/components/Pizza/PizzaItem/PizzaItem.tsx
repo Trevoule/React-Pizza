@@ -1,27 +1,50 @@
-import React from 'react';
+import { Pizza, pizzaTypes } from 'constants/common';
+import React, { useState } from 'react';
 
-const PizzaItem = () => {
+const PizzaItem = ({ imageUrl, title, sizes, price, types }: Pizza) => {
+  const [activeSize, setActiveSize] = useState(0);
+  const [activePizzaType, setActivePizzaType] = useState(0);
+
+  const onClickPizzaType = (index: number) => {
+    setActivePizzaType(index);
+  };
+
+  const onClickSize = (index: number) => {
+    setActiveSize(index);
+  };
+
   return (
     <div className="pizza-block">
-      <img
-        className="pizza-block__image"
-        src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-        alt="Pizza"
-      />
-      <h4 className="pizza-block__title">Cheese-pizza</h4>
+      <img className="pizza-block__image" src={imageUrl} alt={title} />
+      <h4 className="pizza-block__title">{title}</h4>
       <div className="pizza-block__selector">
         <ul>
-          <li className="active">Thin</li>
-          <li>Traditional</li>
+          {types.map((typeId) => {
+            return (
+              <li
+                key={typeId}
+                onClick={onClickPizzaType.bind(null, typeId)}
+                className={activePizzaType === typeId ? 'active' : ''}>
+                {pizzaTypes[typeId]}
+              </li>
+            );
+          })}
         </ul>
         <ul>
-          <li className="active">26 cm</li>
-          <li>30 cm</li>
-          <li>40 cm</li>
+          {sizes.map((size, index) => {
+            return (
+              <li
+                key={size}
+                onClick={onClickSize.bind(null, index)}
+                className={activeSize === index ? 'active' : ''}>
+                {size} cm
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div className="pizza-block__bottom">
-        <div className="pizza-block__price">from 20 EUR</div>
+        <div className="pizza-block__price">from {price} EUR</div>
         <div className="button button--outline button--add">
           <svg
             width="12"
