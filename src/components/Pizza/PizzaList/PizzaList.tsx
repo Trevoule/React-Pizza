@@ -13,7 +13,7 @@ interface Props {
 const PizzaList = ({ isLoading, items }: Props) => {
   return (
     <div className="content__items">
-      {!isLoading
+      {isLoading
         ? Array.from({ length: 6 }).map((_, index) => <PizzaItemSkeleton key={index} />)
         : items.map((pizza) => {
             return <PizzaItem key={pizza.id} {...pizza} />;
