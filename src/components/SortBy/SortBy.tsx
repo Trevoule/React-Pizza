@@ -1,12 +1,17 @@
-import { sortTypes } from 'constants/common';
+/* eslint-disable no-unused-vars */
+import { SortType, sortTypes } from 'constants/common';
 import React, { useState } from 'react';
 
-const SortBy = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedSortBy, setSelectedSortBy] = useState(sortTypes[0]);
+interface Props {
+  sortType: SortType;
+  onHandleSortBy: (type: SortType) => void;
+}
 
-  const onClickSortBy = (type: string) => {
-    setSelectedSortBy(type);
+const SortBy = ({ sortType, onHandleSortBy }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onClickSortBy = (type: SortType) => {
+    onHandleSortBy(type);
     setIsOpen(false);
   };
 
@@ -25,17 +30,17 @@ const SortBy = () => {
           />
         </svg>
         <b>Sort by: </b>
-        <span onClick={() => setIsOpen(!isOpen)}>{selectedSortBy}</span>
+        <span onClick={() => setIsOpen(!isOpen)}>{sortType.name}</span>
       </div>
       {isOpen && (
         <div className="sort__popup">
           <ul>
-            {sortTypes.map((type, i) => (
+            {sortTypes.map((type) => (
               <li
-                key={i}
-                className={selectedSortBy === type ? 'active' : ''}
+                key={type.id}
+                className={type.id === sortType.id ? 'active' : ''}
                 onClick={onClickSortBy.bind(null, type)}>
-                {type}
+                {type.name}
               </li>
             ))}
           </ul>

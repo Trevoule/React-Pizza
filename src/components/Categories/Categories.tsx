@@ -1,13 +1,13 @@
+import React from 'react';
 import { categories } from 'constants/common';
-import React, { useState } from 'react';
 
-const Categories = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+interface Props {
+  categoryId: number;
+  // eslint-disable-next-line no-unused-vars
+  onClickCategory: (id: number) => void;
+}
 
-  const onClickCategory = (index: number) => {
-    setActiveIndex(index);
-  };
-
+const Categories = ({ categoryId, onClickCategory }: Props) => {
   return (
     <div className="categories">
       <ul>
@@ -16,7 +16,7 @@ const Categories = () => {
             <div key={index}>
               <li
                 onClick={onClickCategory.bind(null, index)}
-                className={activeIndex === index ? 'active' : ''}>
+                className={categoryId === index ? 'active' : ''}>
                 {category}
               </li>
             </div>
