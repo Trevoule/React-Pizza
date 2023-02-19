@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
-import React, { useContext } from 'react';
+import React, { useRef } from 'react';
 import { resetSearchValue, selectSearchValue, setSearchValue } from 'store/filter';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { SearchContext, SearchContextType } from 'store/SearchProvider';
 
 import styles from './Search.module.scss';
 
@@ -10,12 +9,15 @@ const Search = () => {
   const dispatch = useAppDispatch();
   const searchValue = useAppSelector(selectSearchValue);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const onHandleSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearchValue(e.target.value));
   };
 
-  const onHandleReset = () => {
+  const onClickReset = () => {
     dispatch(resetSearchValue());
+    inputRef.current && inputRef.current.focus();
   };
 
   return (
@@ -35,6 +37,7 @@ const Search = () => {
         <line x1="21" x2="16.65" y1="21" y2="16.65" />
       </svg>
       <input
+        ref={inputRef}
         value={searchValue}
         onChange={onHandleSearchValue}
         className={styles.input}
@@ -42,7 +45,7 @@ const Search = () => {
       />
       {searchValue && (
         <svg
-          onClick={onHandleReset}
+          onClick={onClickReset}
           className={styles.clearIcon}
           height="48"
           viewBox="0 0 48 48"
