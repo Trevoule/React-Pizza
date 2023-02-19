@@ -1,22 +1,30 @@
 /* eslint-disable no-unused-vars */
-import React, { useRef } from 'react';
-import { resetSearchValue, selectSearchValue, setSearchValue } from 'store/filter';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import React, { useCallback, useRef, useState } from 'react';
+import { resetSearchValue, setSearchValue } from 'store/filter';
+import { useAppDispatch } from 'store/hooks';
 
 import styles from './Search.module.scss';
+import debounce from 'lodash.debounce';
 
 const Search = () => {
   const dispatch = useAppDispatch();
-  const searchValue = useAppSelector(selectSearchValue);
+  const [value, setValue] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const onChangeInput = useCallback(
+    debounce((str) => dispatch(setSearchValue(str)), 250),
+    []
+  );
+
   const onHandleSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchValue(e.target.value));
+    setValue(e.target.value);
+    onChangeInput(e.target.value);
   };
 
   const onClickReset = () => {
     dispatch(resetSearchValue());
+    setValue('');
     inputRef.current && inputRef.current.focus();
   };
 
@@ -38,12 +46,12 @@ const Search = () => {
       </svg>
       <input
         ref={inputRef}
-        value={searchValue}
+        value={value}
         onChange={onHandleSearchValue}
         className={styles.input}
         placeholder="Search for pizza"
       />
-      {searchValue && (
+      {value && (
         <svg
           onClick={onClickReset}
           className={styles.clearIcon}

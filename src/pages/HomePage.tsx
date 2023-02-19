@@ -8,33 +8,27 @@ import SortBy from 'components/SortBy';
 import { pizzasUrl } from 'constants/common';
 import Pagination from 'components/Pagination';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import {
-  selectCategoryId,
-  selectCurrentPage,
-  selectSearchValue,
-  selectSortType,
-  setIsLoading
-} from 'store/filter';
+import { filterStore, setIsLoading } from 'store/filter';
 import { setItems } from 'store/pizza';
+import axios from 'axios';
 
 const HomePage = () => {
   const dispatch = useAppDispatch();
 
-  const categoryId = useAppSelector(selectCategoryId);
-  const searchValue = useAppSelector(selectSearchValue);
-  const sortType = useAppSelector(selectSortType);
-  const currentPage = useAppSelector(selectCurrentPage);
+  const { categoryId, searchValue, sortType, currentPage } = useAppSelector(filterStore);
 
   useEffect(() => {
     dispatch(setIsLoading(true));
     const filterByCategory = !!categoryId && `&category=${categoryId}`;
     const search = searchValue && `&search=${searchValue}`;
-    fetch(
-      `${pizzasUrl}?page=${currentPage}&limit=4&order=${sortType.order}&sortBy=${sortType.sort}${filterByCategory}${search}`
-    )
-      .then((res) => res.json())
-      .then((items) => dispatch(setItems(items)))
+
+    axios
+      .get(
+        `${pizzasUrl}?page=${currentPage}&limit=4&order=${sortType.order}&sortBy=${sortType.sort}${filterByCategory}${search}`
+      )
+      .then((res) => dispatch(setItems(res.data)))
       .finally(() => dispatch(setIsLoading(false)));
+
     // scroll to top
     window.scrollTo(0, 0);
   }, [categoryId, sortType, searchValue, currentPage]);

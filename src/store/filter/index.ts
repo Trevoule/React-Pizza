@@ -57,6 +57,7 @@ export const {
   resetSearchValue
 } = filterSlice.actions;
 
+export const filterStore = (state: RootState) => state.filter;
 export const selectIsLoading = (state: RootState) => state.filter.isLoading;
 export const selectCategoryId = (state: RootState) => state.filter.categoryId;
 export const selectCurrentPage = (state: RootState) => state.filter.currentPage;
