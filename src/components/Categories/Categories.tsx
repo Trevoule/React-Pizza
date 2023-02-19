@@ -1,13 +1,17 @@
 import React from 'react';
 import { categories } from 'constants/common';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { selectCategoryId, setCategoryId } from 'store/filter';
 
-interface Props {
-  categoryId: number;
-  // eslint-disable-next-line no-unused-vars
-  onClickCategory: (id: number) => void;
-}
+const Categories = () => {
+  const dispatch = useAppDispatch();
 
-const Categories = ({ categoryId, onClickCategory }: Props) => {
+  const categoryId = useAppSelector(selectCategoryId);
+
+  const onHandleCategory = (index: number) => {
+    dispatch(setCategoryId(index));
+  };
+
   return (
     <div className="categories">
       <ul>
@@ -15,7 +19,7 @@ const Categories = ({ categoryId, onClickCategory }: Props) => {
           return (
             <div key={index}>
               <li
-                onClick={onClickCategory.bind(null, index)}
+                onClick={onHandleCategory.bind(null, index)}
                 className={categoryId === index ? 'active' : ''}>
                 {category}
               </li>

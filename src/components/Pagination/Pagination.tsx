@@ -2,17 +2,17 @@
 import React from 'react';
 
 import ReactPaginate from 'react-paginate';
+import { setCurrentPage } from 'store/filter';
+import { useAppDispatch } from 'store/hooks';
 import styles from './Pagination.module.scss';
 
-interface Props {
-  onHandlePageChange: (page: number) => void;
-}
+const Pagination = () => {
+  const dispatch = useAppDispatch();
 
-const Pagination = ({ onHandlePageChange }: Props) => {
   const onPageChange = (e: { selected: number }) => {
     const page = e.selected + 1;
 
-    onHandlePageChange(page);
+    dispatch(setCurrentPage(page));
   };
 
   return (

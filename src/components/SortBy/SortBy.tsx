@@ -1,17 +1,16 @@
 /* eslint-disable no-unused-vars */
 import { SortType, sortTypes } from 'constants/common';
 import React, { useState } from 'react';
+import { selectSortType, setSortType } from 'store/filter';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 
-interface Props {
-  sortType: SortType;
-  onHandleSortBy: (type: SortType) => void;
-}
-
-const SortBy = ({ sortType, onHandleSortBy }: Props) => {
+const SortBy = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const sortType = useAppSelector(selectSortType);
 
   const onClickSortBy = (type: SortType) => {
-    onHandleSortBy(type);
+    dispatch(setSortType(type));
     setIsOpen(false);
   };
 

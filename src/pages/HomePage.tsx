@@ -1,53 +1,53 @@
 /* eslint-disable no-unused-vars */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import Categories from 'components/Categories';
 import PizzaList from 'components/Pizza/PizzaList';
 import SortBy from 'components/SortBy';
 
-import { pizzasUrl, SortType, sortTypes } from 'constants/common';
-import { SearchContext } from 'store/SearchProvider';
+import { pizzasUrl } from 'constants/common';
 import Pagination from 'components/Pagination';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import {
+  selectCategoryId,
+  selectCurrentPage,
+  selectSearchValue,
+  selectSortType,
+  setIsLoading
+} from 'store/filter';
+import { setItems } from 'store/pizza';
 
 const HomePage = () => {
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const { searchValue } = useContext(SearchContext);
+  const dispatch = useAppDispatch();
 
-  const [categoryId, setCategoryId] = useState(0);
-  const [sortType, setSortType] = useState<SortType>(sortTypes[0]);
-
-  const [currentPage, setCurrentPage] = useState(1);
+  const categoryId = useAppSelector(selectCategoryId);
+  const searchValue = useAppSelector(selectSearchValue);
+  const sortType = useAppSelector(selectSortType);
+  const currentPage = useAppSelector(selectCurrentPage);
 
   useEffect(() => {
-    setIsLoading(true);
-    const filterByCategory = categoryId ? `&category=${categoryId}` : '';
-    const search = searchValue ? `&search=${searchValue}` : '';
-
+    dispatch(setIsLoading(true));
+    const filterByCategory = !!categoryId && `&category=${categoryId}`;
+    const search = searchValue && `&search=${searchValue}`;
     fetch(
       `${pizzasUrl}?page=${currentPage}&limit=4&order=${sortType.order}&sortBy=${sortType.sort}${filterByCategory}${search}`
     )
       .then((res) => res.json())
-      .then((items) => setItems(items))
-      .finally(() => setIsLoading(false));
-
+      .then((items) => dispatch(setItems(items)))
+      .finally(() => dispatch(setIsLoading(false)));
     // scroll to top
     window.scrollTo(0, 0);
   }, [categoryId, sortType, searchValue, currentPage]);
 
-  const onHandlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
   return (
     <div className="container">
       <div className="content__top">
-        <Categories categoryId={categoryId} onClickCategory={(id: number) => setCategoryId(id)} />
-        <SortBy sortType={sortType} onHandleSortBy={(type: SortType) => setSortType(type)} />
+        <Categories />
+        <SortBy />
       </div>
       <h2 className="content__title">All pizzas</h2>
-      <PizzaList isLoading={isLoading} items={items} />
-      <Pagination onHandlePageChange={onHandlePageChange} />
+      <PizzaList />
+      <Pagination />
     </div>
   );
 };

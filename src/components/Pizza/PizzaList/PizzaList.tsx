@@ -1,16 +1,15 @@
 import React from 'react';
 
-import { Pizza } from 'constants/common';
-
 import PizzaItem from '../PizzaItem';
 import PizzaItemSkeleton from '../PizzaItem/PizzaItemSkeleton';
+import { useAppSelector } from 'store/hooks';
+import { selectItems } from 'store/pizza';
+import { selectIsLoading } from 'store/filter';
 
-interface Props {
-  isLoading: boolean;
-  items: Pizza[];
-}
+const PizzaList = () => {
+  const items = useAppSelector(selectItems);
+  const isLoading = useAppSelector(selectIsLoading);
 
-const PizzaList = ({ isLoading, items }: Props) => {
   return (
     <div className="content__items">
       {isLoading
