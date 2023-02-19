@@ -1,26 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import Categories from 'components/Categories';
 import PizzaList from 'components/Pizza/PizzaList';
 import SortBy from 'components/SortBy';
 
 import { pizzasUrl, SortType, sortTypes } from 'constants/common';
+import { SearchContext } from 'store/SearchProvider';
 
 const HomePage = () => {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { searchValue } = useContext(SearchContext);
 
   const [categoryId, setCategoryId] = useState(0);
   const [sortType, setSortType] = useState<SortType>(sortTypes[0]);
 
   useEffect(() => {
     setIsLoading(true);
-    const filterByCategory = `category=${categoryId}`;
+    const filterByCategory = categoryId ? `&category=${categoryId}` : '';
+    const search = searchValue ? `&search=${searchValue}` : '';
 
     fetch(
-      `${pizzasUrl}?${categoryId && filterByCategory}&sortBy=${sortType.sort}&order=${
-        sortType.order
-      }`
+      `${pizzasUrl}?sortBy=${sortType.sort}&order=${sortType.order}${filterByCategory}${search}`
     )
       .then((res) => res.json())
       .then((items) => setItems(items))
@@ -28,7 +29,7 @@ const HomePage = () => {
 
     // scroll to top
     window.scrollTo(0, 0);
-  }, [categoryId, sortType]);
+  }, [categoryId, sortType, searchValue]);
 
   return (
     <div className="container">
