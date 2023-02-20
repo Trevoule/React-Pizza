@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SortType, sortTypes } from 'constants/common';
 import { RootState } from '../rootStore';
 
@@ -17,6 +17,12 @@ const initialState: FilterState = {
   categoryId: 0,
   searchValue: ''
 };
+
+export interface Params {
+  sort: string;
+  categoryId: number;
+  currentPage: number;
+}
 
 const filterSlice = createSlice({
   name: 'filters',
@@ -44,6 +50,16 @@ const filterSlice = createSlice({
 
     resetSearchValue(state: FilterState) {
       state.searchValue = '';
+    },
+
+    setFilters(state: FilterState, { payload }: PayloadAction<Params>) {
+      const { sort, categoryId, currentPage } = payload;
+
+      state.categoryId = categoryId;
+      state.currentPage = currentPage;
+
+      const sortType = sortTypes.find((type) => type.sort === sort) as SortType;
+      state.sortType = sortType;
     }
   }
 });
@@ -54,10 +70,11 @@ export const {
   setCurrentPage,
   setSearchValue,
   setSortType,
-  resetSearchValue
+  resetSearchValue,
+  setFilters
 } = filterSlice.actions;
 
-export const filterStore = (state: RootState) => state.filter;
+export const selectFilter = (state: RootState) => state.filter;
 export const selectIsLoading = (state: RootState) => state.filter.isLoading;
 export const selectCategoryId = (state: RootState) => state.filter.categoryId;
 export const selectCurrentPage = (state: RootState) => state.filter.currentPage;

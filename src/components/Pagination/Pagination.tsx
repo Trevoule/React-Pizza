@@ -2,13 +2,14 @@
 import React from 'react';
 
 import ReactPaginate from 'react-paginate';
-import { setCurrentPage } from 'store/filter';
-import { useAppDispatch } from 'store/hooks';
+import { selectCurrentPage, setCurrentPage } from 'store/filter';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import styles from './Pagination.module.scss';
 
 const Pagination = () => {
   const dispatch = useAppDispatch();
 
+  const currentPage = useAppSelector(selectCurrentPage);
   const onPageChange = (e: { selected: number }) => {
     const page = e.selected + 1;
 
@@ -25,6 +26,7 @@ const Pagination = () => {
         onPageChange={onPageChange}
         pageRangeDisplayed={8}
         pageCount={3}
+        forcePage={currentPage - 1}
       />
     </>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { categories } from 'constants/common';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectCategoryId, setCategoryId } from 'store/filter';
+import { selectCategoryId, setCategoryId, setCurrentPage } from 'store/filter';
 
 const Categories = () => {
   const dispatch = useAppDispatch();
@@ -10,6 +10,7 @@ const Categories = () => {
 
   const onHandleCategory = (index: number) => {
     dispatch(setCategoryId(index));
+    dispatch(setCurrentPage(1));
   };
 
   return (
@@ -20,7 +21,7 @@ const Categories = () => {
             <div key={index}>
               <li
                 onClick={onHandleCategory.bind(null, index)}
-                className={categoryId === index ? 'active' : ''}>
+                className={+categoryId === index ? 'active' : ''}>
                 {category}
               </li>
             </div>

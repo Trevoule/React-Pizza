@@ -1,26 +1,31 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import axios from 'axios';
+import qs from 'qs';
 
 import Categories from 'components/Categories';
 import PizzaList from 'components/Pizza/PizzaList';
 import SortBy from 'components/SortBy';
+import Pagination from 'components/Pagination';
 
 import { pizzasUrl } from 'constants/common';
-import Pagination from 'components/Pagination';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { filterStore, setIsLoading } from 'store/filter';
+import { selectFilter, Params, setFilters, setIsLoading } from 'store/filter';
 import { setItems } from 'store/pizza';
-import axios from 'axios';
 
 const HomePage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isSearch = useRef(false);
+  const isMounted = useRef(false);
 
-  const { categoryId, searchValue, sortType, currentPage } = useAppSelector(filterStore);
+  const { categoryId, searchValue, sortType, currentPage } = useAppSelector(selectFilter);
 
-  useEffect(() => {
+  const fetchPizzas = () => {
     dispatch(setIsLoading(true));
-    const filterByCategory = !!categoryId && `&category=${categoryId}`;
-    const search = searchValue && `&search=${searchValue}`;
+    const filterByCategory = categoryId > 0 ? `&category=${categoryId}` : '';
+    const search = searchValue ? `&search=${searchValue}` : '';
 
     axios
       .get(
@@ -28,10 +33,45 @@ const HomePage = () => {
       )
       .then((res) => dispatch(setItems(res.data)))
       .finally(() => dispatch(setIsLoading(false)));
+  };
 
+  useEffect(() => {
+    // for check if first render
+    if (isMounted.current) {
+      const queryString = qs.stringify(
+        {
+          currentPage,
+          sort: sortType.sort,
+          categoryId
+        },
+        { addQueryPrefix: true }
+      );
+      navigate(queryString);
+    }
+
+    isMounted.current = true;
+  }, [categoryId, sortType.order, currentPage]);
+
+  useEffect(() => {
+    const windowLocation = window.location.search;
+
+    if (windowLocation) {
+      const params = qs.parse(windowLocation.substring(1)) as unknown as Params;
+      dispatch(setFilters(params));
+      isSearch.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
     // scroll to top
     window.scrollTo(0, 0);
-  }, [categoryId, sortType, searchValue, currentPage]);
+
+    if (!isSearch.current) {
+      fetchPizzas();
+    }
+
+    isSearch.current = false;
+  }, [categoryId, sortType.order, searchValue, currentPage]);
 
   return (
     <div className="container">
