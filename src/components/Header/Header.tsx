@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from 'store/hooks';
 import { selectCart } from 'store/cart';
@@ -7,7 +7,11 @@ import Search from 'components/Search';
 import IconSVG from 'components/ui/IconSVG';
 
 const Header = () => {
-  const { totalQty, totalSum } = useAppSelector(selectCart);
+  const { cartItems, totalSum } = useAppSelector(selectCart);
+
+  const totalCartItems = useMemo(() => {
+    return cartItems.reduce((sum, item) => sum + item.qty, 0);
+  }, [cartItems]);
 
   return (
     <div className="header">
@@ -27,7 +31,7 @@ const Header = () => {
             <span>{totalSum} PLN</span>
             <div className="button__delimiter"></div>
             <IconSVG icon={'cart'} width={18} height={18} color="white" />
-            <span>{totalQty}</span>
+            <span>{totalCartItems}</span>
           </Link>
         </div>
       </div>

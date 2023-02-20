@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Pizza, pizzaTypes } from 'constants/common';
-import { addToCart, CartItem, selectCart } from 'store/cart';
+import { addToCart, ICartItem, selectCartItems } from 'store/cart';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import IconSVG from 'components/ui/IconSVG';
 
 const PizzaItem = ({ id, imageUrl, title, sizes, price, types }: Pizza) => {
   const dispatch = useAppDispatch();
+  const cartItems = useAppSelector(selectCartItems);
 
   const [activeSize, setActiveSize] = useState(0);
   const [activePizzaType, setActivePizzaType] = useState(0);
 
-  const { cartItems, totalQty, totalSum } = useAppSelector(selectCart);
-
-  console.log(cartItems);
-  console.log(totalQty);
-  console.log(totalSum);
+  const countItems = useMemo(() => {
+    return cartItems && cartItems.find((item) => item.id === id)?.qty;
+  }, [cartItems]);
 
   const onClickPizzaType = (index: number) => {
     setActivePizzaType(index);
@@ -23,6 +22,19 @@ const PizzaItem = ({ id, imageUrl, title, sizes, price, types }: Pizza) => {
 
   const onClickSize = (index: number) => {
     setActiveSize(index);
+  };
+
+  const onHandleAddToCart = () => {
+    dispatch(
+      addToCart({
+        id,
+        imageUrl,
+        title,
+        price,
+        size: activeSize,
+        pizzaType: pizzaTypes[activePizzaType]
+      } as ICartItem)
+    );
   };
 
   return (
@@ -58,12 +70,10 @@ const PizzaItem = ({ id, imageUrl, title, sizes, price, types }: Pizza) => {
         </div>
         <div className="pizza-block__bottom">
           <div className="pizza-block__price">from {price} PLN</div>
-          <div
-            className="button button--outline button--add"
-            onClick={() => dispatch(addToCart({ id, title, size: sizes[0], price } as CartItem))}>
+          <div className="button button--outline button--add" onClick={onHandleAddToCart}>
             <IconSVG icon="add" width={10} height={10} color="#fe5f1e" />
             <span>Add</span>
-            <i>2</i>
+            <i>{countItems || 0}</i>
           </div>
         </div>
       </div>

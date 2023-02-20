@@ -1,13 +1,16 @@
 export const pizzasUrl = 'https://63efb7b1271439b7fe74db08.mockapi.io/items';
-export interface Pizza {
+export interface PizzaBase {
   id: number;
   imageUrl: string;
   title: string;
-  types: number[];
-  sizes: number[];
   price: number;
   category: number;
   rating: number;
+}
+
+export interface Pizza extends PizzaBase {
+  types: number[];
+  sizes: number[];
 }
 
 export const categories = ['All', 'With meat', 'Vegetarian', 'Grilled', 'Spicy', 'Calzone'];

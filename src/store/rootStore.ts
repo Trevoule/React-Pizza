@@ -1,11 +1,13 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import filterSliceReducer from './filter';
 import pizzaSliceReducer from './pizza';
+import cartSliceReducer from './cart';
 
 export const store = configureStore({
   reducer: {
     filter: filterSliceReducer,
-    pizza: pizzaSliceReducer
+    pizza: pizzaSliceReducer,
+    cart: cartSliceReducer
   }
 });
 
