@@ -1,9 +1,21 @@
-import { Pizza, pizzaTypes } from 'constants/common';
 import React, { useState } from 'react';
 
-const PizzaItem = ({ imageUrl, title, sizes, price, types }: Pizza) => {
+import { Pizza, pizzaTypes } from 'constants/common';
+import { addToCart, CartItem, selectCart } from 'store/cart';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import IconSVG from 'components/ui/IconSVG';
+
+const PizzaItem = ({ id, imageUrl, title, sizes, price, types }: Pizza) => {
+  const dispatch = useAppDispatch();
+
   const [activeSize, setActiveSize] = useState(0);
   const [activePizzaType, setActivePizzaType] = useState(0);
+
+  const { cartItems, totalQty, totalSum } = useAppSelector(selectCart);
+
+  console.log(cartItems);
+  console.log(totalQty);
+  console.log(totalSum);
 
   const onClickPizzaType = (index: number) => {
     setActivePizzaType(index);
@@ -46,18 +58,10 @@ const PizzaItem = ({ imageUrl, title, sizes, price, types }: Pizza) => {
         </div>
         <div className="pizza-block__bottom">
           <div className="pizza-block__price">from {price} PLN</div>
-          <div className="button button--outline button--add">
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M10.8 4.8H7.2V1.2C7.2 0.5373 6.6627 0 6 0C5.3373 0 4.8 0.5373 4.8 1.2V4.8H1.2C0.5373 4.8 0 5.3373 0 6C0 6.6627 0.5373 7.2 1.2 7.2H4.8V10.8C4.8 11.4627 5.3373 12 6 12C6.6627 12 7.2 11.4627 7.2 10.8V7.2H10.8C11.4627 7.2 12 6.6627 12 6C12 5.3373 11.4627 4.8 10.8 4.8Z"
-                fill="white"
-              />
-            </svg>
+          <div
+            className="button button--outline button--add"
+            onClick={() => dispatch(addToCart({ id, title, size: sizes[0], price } as CartItem))}>
+            <IconSVG icon="add" width={10} height={10} color="#fe5f1e" />
             <span>Add</span>
             <i>2</i>
           </div>

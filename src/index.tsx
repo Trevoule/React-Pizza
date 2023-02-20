@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'store/rootStore';
 import App from './App';
+import { ReactComponent as SVGSprite } from 'assets/icons/sprite.svg';
 
 const container = document.getElementById('root') as HTMLElement;
 const root = ReactDOM.createRoot(container);
@@ -12,5 +13,6 @@ root.render(
     <BrowserRouter>
       <App />
     </BrowserRouter>
+    <SVGSprite />
   </Provider>
 );
