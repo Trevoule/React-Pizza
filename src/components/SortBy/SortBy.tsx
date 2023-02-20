@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { SortType, sortTypes } from 'constants/common';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { selectSortType, setSortType } from 'store/filter';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 
@@ -9,13 +9,31 @@ const SortBy = () => {
   const dispatch = useAppDispatch();
   const sortType = useAppSelector(selectSortType);
 
+  const sortRef = useRef<HTMLDivElement>(null);
+
   const onClickSortBy = (type: SortType) => {
     dispatch(setSortType(type));
     setIsOpen(false);
   };
 
+  // listener for outside pop-up click
+  useEffect(() => {
+    const handleOutsideClick = (event: Event) => {
+      // check if sortRef in body
+      if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
+        setIsOpen(false);
+      }
+    };
+
+    // listener for all body
+    document.body.addEventListener('click', handleOutsideClick);
+
+    // remove listener when unmounted
+    return () => document.body.removeEventListener('click', handleOutsideClick);
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"
@@ -28,7 +46,7 @@ const SortBy = () => {
             fill="#2C2C2C"
           />
         </svg>
-        <b>Sort by: </b>
+        <b>Sorted by: </b>
         <span onClick={() => setIsOpen(!isOpen)}>{sortType.name}</span>
       </div>
       {isOpen && (
