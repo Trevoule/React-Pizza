@@ -12,7 +12,9 @@ const Cart = () => {
   const { cartItems, totalSum } = useAppSelector(selectCart);
 
   const onHandleClearCart = () => {
-    dispatch(clearCart());
+    if (confirm('Are you sure you want to clear your cart?')) {
+      dispatch(clearCart());
+    }
   };
 
   const isCartItems = useMemo(() => {

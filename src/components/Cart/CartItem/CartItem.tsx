@@ -23,7 +23,9 @@ const CartItem = ({ cartItem }: Props) => {
   };
 
   const onHandleRemoveItem = () => {
-    dispatch(removeFromCart(id));
+    if (confirm(`Are you sure you want to remove pizza: ${title}`)) {
+      dispatch(removeFromCart(id));
+    }
   };
 
   return (
