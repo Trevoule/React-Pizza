@@ -1,6 +1,7 @@
 import React from 'react';
-import { categories } from 'constants/common';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
+
+import { categories } from 'constants/common';
 import { selectCategoryId, setCategoryId, setCurrentPage } from 'store/filter';
 
 const Categories = () => {

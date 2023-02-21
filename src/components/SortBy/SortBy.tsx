@@ -1,9 +1,9 @@
-/* eslint-disable no-unused-vars */
-import IconSVG from 'components/ui/IconSVG';
-import { SortType, sortTypes } from 'constants/common';
 import React, { useEffect, useRef, useState } from 'react';
-import { selectSortType, setSortType } from 'store/filter';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
+
+import { SortType, sortTypes } from 'constants/common';
+import { selectSortType, setSortType } from 'store/filter';
+import IconSVG from 'components/ui/IconSVG';
 
 const SortBy = () => {
   const [isOpen, setIsOpen] = useState(false);

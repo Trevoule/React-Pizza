@@ -1,18 +1,16 @@
-/* eslint-disable no-unused-vars */
+import qs from 'qs';
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import axios from 'axios';
-import qs from 'qs';
 
 import Categories from 'components/Categories';
 import PizzaList from 'components/Pizza/PizzaList';
 import SortBy from 'components/SortBy';
 import Pagination from 'components/Pagination';
+import Error from 'components/ui/Error';
 
 import { selectFilter, Params, setFilters } from 'store/filter';
 import { fetchPizzas, selectPizza, Status } from 'store/pizza';
-import Error from 'components/ui/Error';
 
 const HomePage = () => {
   const dispatch = useAppDispatch();

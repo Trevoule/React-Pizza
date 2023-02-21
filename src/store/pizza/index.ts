@@ -35,10 +35,14 @@ export const fetchPizzas = createAsyncThunk(
 
     try {
       const res = await axios.get(
-        `${pizzasUrl}?page=${currentPage}&limit=4&order=${sortType.order}&sortBy=${sortType.sort}${filterByCategory}${search}`
+        `${pizzasUrl}?page=${currentPage}&limit=4&order=${sortType.order}&&sortBy=${sortType.sort}${filterByCategory}${search}`
       );
 
-      return res.data;
+      if (res.data.length > 0) {
+        return res.data;
+      }
+
+      throw new Error();
     } catch (error) {
       throw new Error('Fetch failed!');
     }
@@ -75,7 +79,6 @@ const pizzaSlice = createSlice({
 export const { setItems } = pizzaSlice.actions;
 
 export const selectPizza = (state: RootState) => state.pizza;
-
 export const selectItems = (state: RootState) => state.pizza.items;
 
 export const pizzaActions = pizzaSlice.actions;

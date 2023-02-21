@@ -1,10 +1,9 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
-
 import ReactPaginate from 'react-paginate';
+import styles from './Pagination.module.scss';
+
 import { selectCurrentPage, setCurrentPage } from 'store/filter';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import styles from './Pagination.module.scss';
 
 const Pagination = () => {
   const dispatch = useAppDispatch();

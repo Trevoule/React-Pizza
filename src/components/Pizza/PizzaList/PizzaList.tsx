@@ -1,8 +1,9 @@
 import React from 'react';
+import { useAppSelector } from 'store/hooks';
 
 import PizzaItem from '../PizzaItem';
 import PizzaItemSkeleton from '../PizzaItem/PizzaItemSkeleton';
-import { useAppSelector } from 'store/hooks';
+
 import { selectItems, selectPizza, Status } from 'store/pizza';
 
 const PizzaList = () => {

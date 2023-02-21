@@ -1,20 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Pizza, pizzaTypes } from 'constants/common';
-import { addToCart, ICartItem, selectCartItems } from 'store/cart';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
 import IconSVG from 'components/ui/IconSVG';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { addToCart, ICartItem, selectCountItems } from 'store/cart';
 
 const PizzaItem = ({ id, imageUrl, title, sizes, price, types }: Pizza) => {
   const dispatch = useAppDispatch();
-  const cartItems = useAppSelector(selectCartItems);
+  const countItems = useAppSelector(selectCountItems(id));
 
   const [activeSize, setActiveSize] = useState(0);
   const [activePizzaType, setActivePizzaType] = useState(0);
-
-  const countItems = useMemo(() => {
-    return cartItems && cartItems.find((item) => item.id === id)?.qty;
-  }, [cartItems]);
 
   const onClickPizzaType = (index: number) => {
     setActivePizzaType(index);

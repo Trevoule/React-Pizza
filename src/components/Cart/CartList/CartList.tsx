@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { clearCart, ICartItem, selectCart } from 'store/cart';
+import { clearCart, ICartItem, selectCart, selectTotalCartItems } from 'store/cart';
 
 import IconSVG from 'components/ui/IconSVG';
 import CartItem from '../CartItem';
@@ -10,6 +10,7 @@ import CartEmpty from '../CartEmpty';
 const Cart = () => {
   const dispatch = useAppDispatch();
   const { cartItems, totalSum } = useAppSelector(selectCart);
+  const totalCartItems = useAppSelector(selectTotalCartItems);
 
   const onHandleClearCart = () => {
     if (confirm('Are you sure you want to clear your cart?')) {
@@ -17,13 +18,7 @@ const Cart = () => {
     }
   };
 
-  const isCartItems = useMemo(() => {
-    return !!cartItems.length;
-  }, [cartItems]);
-
-  const totalCartItems = useMemo(() => {
-    return cartItems.reduce((sum, item) => sum + item.qty, 0);
-  }, [cartItems]);
+  const isCartItems = !!cartItems.length;
 
   if (!isCartItems) {
     return <CartEmpty />;

@@ -93,6 +93,10 @@ export const { addToCart, plusQtyItem, minusQtyItem, clearCart, removeFromCart }
 export const selectCart = (state: RootState) => state.cart;
 export const selectCartItems = (state: RootState) => state.cart.cartItems;
 export const selectCartTotalSum = (state: RootState) => state.cart.totalSum;
+export const selectCountItems = (id: number) => (state: RootState) =>
+  state.cart.cartItems.find((cartItem) => cartItem.id === id)?.qty;
+export const selectTotalCartItems = (state: RootState) =>
+  state.cart.cartItems.reduce((sum, item) => sum + item.qty, 0);
 
 export const cartActions = cartSlice.actions;
 
