@@ -10,9 +10,9 @@ import PizzaList from 'components/Pizza/PizzaList';
 import SortBy from 'components/SortBy';
 import Pagination from 'components/Pagination';
 
-import { pizzasUrl } from 'constants/common';
-import { selectFilter, Params, setFilters, setIsLoading } from 'store/filter';
-import { setItems } from 'store/pizza';
+import { selectFilter, Params, setFilters } from 'store/filter';
+import { fetchPizzas, selectPizza, Status } from 'store/pizza';
+import Error from 'components/ui/Error';
 
 const HomePage = () => {
   const dispatch = useAppDispatch();
@@ -21,19 +21,7 @@ const HomePage = () => {
   const isMounted = useRef(false);
 
   const { categoryId, searchValue, sortType, currentPage } = useAppSelector(selectFilter);
-
-  const fetchPizzas = () => {
-    dispatch(setIsLoading(true));
-    const filterByCategory = categoryId > 0 ? `&category=${categoryId}` : '';
-    const search = searchValue ? `&search=${searchValue}` : '';
-
-    axios
-      .get(
-        `${pizzasUrl}?page=${currentPage}&limit=4&order=${sortType.order}&sortBy=${sortType.sort}${filterByCategory}${search}`
-      )
-      .then((res) => dispatch(setItems(res.data)))
-      .finally(() => dispatch(setIsLoading(false)));
-  };
+  const { status } = useAppSelector(selectPizza);
 
   useEffect(() => {
     // for check if first render
@@ -67,7 +55,7 @@ const HomePage = () => {
     window.scrollTo(0, 0);
 
     if (!isSearch.current) {
-      fetchPizzas();
+      dispatch(fetchPizzas({ categoryId, searchValue, sortType, currentPage }));
     }
 
     isSearch.current = false;
@@ -80,8 +68,14 @@ const HomePage = () => {
         <SortBy />
       </div>
       <h2 className="content__title">All pizzas</h2>
-      <PizzaList />
-      <Pagination />
+      {status === Status.failed ? (
+        <Error />
+      ) : (
+        <>
+          <PizzaList />
+          <Pagination />
+        </>
+      )}
     </div>
   );
 };

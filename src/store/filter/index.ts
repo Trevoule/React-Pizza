@@ -3,7 +3,6 @@ import { SortType, sortTypes } from 'constants/common';
 import { RootState } from '../rootStore';
 
 export interface FilterState {
-  isLoading: boolean;
   currentPage: number;
   sortType: SortType;
   categoryId: number;
@@ -11,7 +10,6 @@ export interface FilterState {
 }
 
 const initialState: FilterState = {
-  isLoading: true,
   currentPage: 1,
   sortType: sortTypes[0],
   categoryId: 0,
@@ -28,10 +26,6 @@ const filterSlice = createSlice({
   name: 'filters',
   initialState,
   reducers: {
-    setIsLoading(state: FilterState, { payload }) {
-      state.isLoading = payload;
-    },
-
     setCurrentPage(state: FilterState, { payload }) {
       state.currentPage = payload;
     },
@@ -65,7 +59,6 @@ const filterSlice = createSlice({
 });
 
 export const {
-  setIsLoading,
   setCategoryId,
   setCurrentPage,
   setSearchValue,
@@ -75,7 +68,7 @@ export const {
 } = filterSlice.actions;
 
 export const selectFilter = (state: RootState) => state.filter;
-export const selectIsLoading = (state: RootState) => state.filter.isLoading;
+
 export const selectCategoryId = (state: RootState) => state.filter.categoryId;
 export const selectCurrentPage = (state: RootState) => state.filter.currentPage;
 export const selectSearchValue = (state: RootState) => state.filter.searchValue;
