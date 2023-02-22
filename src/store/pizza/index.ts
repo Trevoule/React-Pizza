@@ -12,11 +12,13 @@ export enum Status {
 
 interface PizzaState {
   items: [] | Pizza[];
+  item: null | Pizza;
   status: Status;
 }
 
 const initialState: PizzaState = {
   items: [],
+  item: null,
   status: Status.loading
 };
 
@@ -35,7 +37,7 @@ export const fetchPizzas = createAsyncThunk(
 
     try {
       const res = await axios.get(
-        `${pizzasUrl}?page=${currentPage}&limit=4&order=${sortType.order}&&sortBy=${sortType.sort}${filterByCategory}${search}`
+        `${pizzasUrl}?page=${currentPage}&limit=4&order=${sortType.order}&f&sortBy=${sortType.sort}${filterByCategory}${search}`
       );
 
       if (res.data.length > 0) {
@@ -48,6 +50,16 @@ export const fetchPizzas = createAsyncThunk(
     }
   }
 );
+
+export const fetchPizzaById = createAsyncThunk('pizza/fetchPizzaById', async (id: string) => {
+  try {
+    const res = await axios.get(`${pizzasUrl}/${id}`);
+
+    return res.data;
+  } catch (error) {
+    throw new Error('Fetch failed!');
+  }
+});
 
 const pizzaSlice = createSlice({
   name: 'pizza',
@@ -72,6 +84,21 @@ const pizzaSlice = createSlice({
       builder.addCase(fetchPizzas.rejected, (state: PizzaState) => {
         state.status = Status.failed;
         state.items = [];
+      }),
+      builder.addCase(fetchPizzaById.pending, (state: PizzaState) => {
+        state.status = Status.loading;
+        state.item = null;
+      }),
+      builder.addCase(
+        fetchPizzaById.fulfilled,
+        (state: PizzaState, action: PayloadAction<Pizza>) => {
+          state.item = action.payload;
+          state.status = Status.success;
+        }
+      ),
+      builder.addCase(fetchPizzaById.rejected, (state: PizzaState) => {
+        state.status = Status.failed;
+        state.item = null;
       });
   }
 });
@@ -80,6 +107,7 @@ export const { setItems } = pizzaSlice.actions;
 
 export const selectPizza = (state: RootState) => state.pizza;
 export const selectItems = (state: RootState) => state.pizza.items;
+export const selectPizzaItemById = (state: RootState) => state.pizza.item;
 
 export const pizzaActions = pizzaSlice.actions;
 

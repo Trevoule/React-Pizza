@@ -37,7 +37,7 @@ const cartSlice = createSlice({
       }, 0);
     },
 
-    plusQtyItem(state: CartState, { payload }: PayloadAction<{ id: number; price: number }>) {
+    plusQtyItem(state: CartState, { payload }: PayloadAction<{ id: string; price: number }>) {
       const updatedItems = state.cartItems.map((cartItem) => {
         if (cartItem.id === payload.id) {
           cartItem.qty++;
@@ -52,7 +52,7 @@ const cartSlice = createSlice({
       }, 0);
     },
 
-    minusQtyItem(state: CartState, { payload }: PayloadAction<{ id: number; price: number }>) {
+    minusQtyItem(state: CartState, { payload }: PayloadAction<{ id: string; price: number }>) {
       const updatedItems = state.cartItems.reduce((acc, curCartItem) => {
         if (curCartItem.id === payload.id && curCartItem.qty > 1) {
           curCartItem.qty--;
@@ -93,7 +93,7 @@ export const { addToCart, plusQtyItem, minusQtyItem, clearCart, removeFromCart }
 export const selectCart = (state: RootState) => state.cart;
 export const selectCartItems = (state: RootState) => state.cart.cartItems;
 export const selectCartTotalSum = (state: RootState) => state.cart.totalSum;
-export const selectCountItems = (id: number) => (state: RootState) =>
+export const selectCountItems = (id: string) => (state: RootState) =>
   state.cart.cartItems.find((cartItem) => cartItem.id === id)?.qty;
 export const selectTotalCartItems = (state: RootState) =>
   state.cart.cartItems.reduce((sum, item) => sum + item.qty, 0);

@@ -2,7 +2,7 @@ import React from 'react';
 import { useAppSelector } from 'store/hooks';
 
 import PizzaItem from '../PizzaItem';
-import PizzaItemSkeleton from '../PizzaItem/PizzaItemSkeleton';
+import PizzaItemSkeleton from 'components/ui/Skeleton/PizzaItemSkeleton';
 
 import { selectItems, selectPizza, Status } from 'store/pizza';
 

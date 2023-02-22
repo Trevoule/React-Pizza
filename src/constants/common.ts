@@ -1,6 +1,6 @@
 export const pizzasUrl = 'https://63efb7b1271439b7fe74db08.mockapi.io/items';
 export interface PizzaBase {
-  id: number;
+  id: string;
   imageUrl: string;
   title: string;
   price: number;

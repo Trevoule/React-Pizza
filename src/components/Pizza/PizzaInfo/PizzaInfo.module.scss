@@ -1,0 +1,38 @@
+@import '../../../scss/variables';
+
+.root {
+  margin: 40px auto;
+  width: 620px;
+  text-align: center;
+
+  h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  h4 {
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: $orange;
+  }
+
+  img {
+    display: block;
+    width: 350px;
+    margin: 25px auto 40px;
+  }
+}
+
+.loading {
+  margin: 300px auto;
+  width: 620px;
+  text-align: center;
+
+  h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+}

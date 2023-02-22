@@ -4,6 +4,7 @@ import { Pizza, pizzaTypes } from 'constants/common';
 import IconSVG from 'components/ui/IconSVG';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { addToCart, ICartItem, selectCountItems } from 'store/cart';
+import { Link } from 'react-router-dom';
 
 const PizzaItem = ({ id, imageUrl, title, sizes, price, types }: Pizza) => {
   const dispatch = useAppDispatch();
@@ -36,8 +37,10 @@ const PizzaItem = ({ id, imageUrl, title, sizes, price, types }: Pizza) => {
   return (
     <div className="pizza-block-wrapper">
       <div className="pizza-block">
-        <img className="pizza-block__image" src={imageUrl} alt={title} />
-        <h4 className="pizza-block__title">{title}</h4>
+        <Link to={`/pizza/${id}`}>
+          <img className="pizza-block__image" src={imageUrl} alt={title} />
+          <h4 className="pizza-block__title">{title}</h4>
+        </Link>
         <div className="pizza-block__selector">
           <ul>
             {types.map((typeId) => {
