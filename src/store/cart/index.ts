@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PizzaBase } from 'constants/common';
 import { RootState } from 'store/rootStore';
+import { getCartFromLS, calcTotalSum } from 'utils';
 
 export interface ICartItem extends PizzaBase {
   pizzaType: string;
@@ -13,9 +14,11 @@ interface CartState {
   totalSum: number;
 }
 
+const { cartItems, totalSum } = getCartFromLS();
+
 const initialState: CartState = {
-  cartItems: [],
-  totalSum: 0
+  cartItems,
+  totalSum
 };
 
 const cartSlice = createSlice({
@@ -32,9 +35,7 @@ const cartSlice = createSlice({
         state.cartItems = updatedCart;
       }
 
-      state.totalSum = state.cartItems.reduce((sum, obj) => {
-        return (sum += obj.price * obj.qty);
-      }, 0);
+      state.totalSum = calcTotalSum(state.cartItems);
     },
 
     plusQtyItem(state: CartState, { payload }: PayloadAction<{ id: string; price: number }>) {
@@ -47,9 +48,7 @@ const cartSlice = createSlice({
 
       state.cartItems = updatedItems;
 
-      state.totalSum = state.cartItems.reduce((sum, obj) => {
-        return (sum += obj.price * obj.qty);
-      }, 0);
+      state.totalSum = calcTotalSum(state.cartItems);
     },
 
     minusQtyItem(state: CartState, { payload }: PayloadAction<{ id: string; price: number }>) {

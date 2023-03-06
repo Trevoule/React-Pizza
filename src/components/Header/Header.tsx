@@ -1,15 +1,26 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from 'store/hooks';
 
 import Search from 'components/Search';
 import IconSVG from 'components/ui/IconSVG';
 
-import { selectCart, selectTotalCartItems } from 'store/cart';
+import { selectCart, selectCartItems, selectTotalCartItems } from 'store/cart';
 
 const Header = () => {
   const { totalSum } = useAppSelector(selectCart);
   const totalCartItems = useAppSelector(selectTotalCartItems);
+
+  const cartItems = useAppSelector(selectCartItems);
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      const json = JSON.stringify(cartItems);
+      localStorage.setItem('cart', json);
+    }
+    isMounted.current = true;
+  }, [cartItems]);
 
   return (
     <div className="header">
